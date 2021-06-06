@@ -1,4 +1,4 @@
-package com.ott.iconomi.statistics.bot.imonoci.pages;
+package com.ott.iconomi.statistics.bot.iconomi.pages;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
@@ -9,8 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
-import com.ott.iconomi.statistics.bot.imonoci.ImonociUriHelper;
-import com.ott.iconomi.statistics.bot.imonoci.Navigate;
+import com.ott.iconomi.statistics.bot.iconomi.IconomiUriHelper;
+import com.ott.iconomi.statistics.bot.iconomi.Navigate;
 
 @Component
 public class LoginPage extends AbstractImonociPage {
@@ -21,7 +21,7 @@ public class LoginPage extends AbstractImonociPage {
 	
 
 	public void login(String login, String pws) {
-		navigate.to(ImonociUriHelper.getLoginUrl());
+		navigate.to(IconomiUriHelper.getLoginUrl());
 //            driver.findElement(By.name("q")).sendKeys("cheese" + Keys.ENTER);
         WebElement firstResult = wait.until(presenceOfElementLocated(By.className("icon-cancel")));
         driver.findElements(By.className("icon-cancel")).forEach(WebElement::click);

@@ -1,4 +1,4 @@
-package com.ott.iconomi.statistics.bot.imonoci.pages;
+package com.ott.iconomi.statistics.bot.iconomi.pages;
 
 import com.ott.iconomi.statistics.bot.utils.Functions;
 import org.openqa.selenium.By;
@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.ott.iconomi.statistics.bot.imonoci.Navigate;
+import com.ott.iconomi.statistics.bot.iconomi.Navigate;
 
 import java.util.List;
 

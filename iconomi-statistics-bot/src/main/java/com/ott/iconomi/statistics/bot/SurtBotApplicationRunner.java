@@ -2,9 +2,9 @@ package com.ott.iconomi.statistics.bot;
 
 import javax.transaction.Transactional;
 
-import com.ott.iconomi.statistics.bot.imonoci.ImonociPageHelper;
-import com.ott.iconomi.statistics.bot.imonoci.pages.LoginPage;
-import com.ott.iconomi.statistics.bot.imonoci.pages.StrategiesPage;
+import com.ott.iconomi.statistics.bot.iconomi.IconomiPageHelper;
+import com.ott.iconomi.statistics.bot.iconomi.pages.LoginPage;
+import com.ott.iconomi.statistics.bot.iconomi.pages.StrategiesPage;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -54,7 +54,7 @@ public class SurtBotApplicationRunner implements ApplicationRunner {
 
 	private void doExtraction(String login, String pws, Snapshot.SnapshotBuilder snapshot) {
 		log.debug("login with " + login +  "/*******");
-        ImonociPageHelper.waitAMoment();
+        IconomiPageHelper.waitAMoment();
 		loginPage.login(login, pws);
 		strategiesPage.takeASnapshot(snapshot);
 	}

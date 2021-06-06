@@ -2,7 +2,7 @@ package com.ott.iconomi.statistics.bot.utils;
 
 import java.util.function.Supplier;
 
-import com.ott.iconomi.statistics.bot.imonoci.ImonociPageHelper;
+import com.ott.iconomi.statistics.bot.iconomi.IconomiPageHelper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,7 +16,7 @@ public abstract class Functions {
 			try {
 				return s.get();
 			} catch (org.openqa.selenium.StaleElementReferenceException e) {
-				ImonociPageHelper.waitAMoment();
+				IconomiPageHelper.waitAMoment();
 				tries++;
 				log.warn("org.openqa.selenium.StaleElementReferenceException e on Refreshable element. try " + tries + "/" + MAX_TRY_WITH_REFRESHABLE);
 				if (tries == MAX_TRY_WITH_REFRESHABLE) {

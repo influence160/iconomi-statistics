@@ -1,21 +1,20 @@
-package com.ott.iconomi.statistics.bot.imonoci.pages;
+package com.ott.iconomi.statistics.bot.iconomi.pages;
 
-import static com.ott.iconomi.statistics.bot.imonoci.ImonociPageHelper.parseDateTime;
+import static com.ott.iconomi.statistics.bot.iconomi.IconomiPageHelper.parseDateTime;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ott.iconomi.statistics.bot.imonoci.pages.queries.AssetQueries;
-import com.ott.iconomi.statistics.bot.utils.Functions;
+import com.ott.iconomi.statistics.bot.iconomi.pages.queries.AssetQueries;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
-import com.ott.iconomi.statistics.bot.imonoci.ImonociPageHelper;
-import com.ott.iconomi.statistics.bot.imonoci.Navigate;
+import com.ott.iconomi.statistics.bot.iconomi.IconomiPageHelper;
+import com.ott.iconomi.statistics.bot.iconomi.Navigate;
 import com.ott.iconomi.statistics.domain.model.Asset;
 import com.ott.iconomi.statistics.domain.model.CurrentStructure;
 import com.ott.iconomi.statistics.domain.model.Strategy;
@@ -62,7 +61,7 @@ public class StrategyPage extends AssetPage {
 			structureElementBuilder.asset(asset);
 			final int index = i;
 			String percent = findElement(By.xpath(AssetQueries.getStructureElementPercent(index + 1))).getText();
-			structureElementBuilder.percent(ImonociPageHelper.percentTextToFloat(percent));
+			structureElementBuilder.percent(IconomiPageHelper.percentTextToFloat(percent));
 			currentStructureElements.add(structureElementBuilder.build());
 		}
 		currentStructureBuilder.elements(currentStructureElements);
@@ -83,6 +82,6 @@ public class StrategyPage extends AssetPage {
 
 	private Float getReturnValue(AssetQueries.ReturnType type) {
 		String text = getTextByCss(AssetQueries.getReturn(type));
-		return ImonociPageHelper.returnPercentTextToFloat(text);
+		return IconomiPageHelper.returnPercentTextToFloat(text);
 	}
 }

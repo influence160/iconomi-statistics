@@ -1,8 +1,5 @@
-package com.ott.iconomi.statistics.bot.imonoci;
+package com.ott.iconomi.statistics.bot.iconomi;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -10,7 +7,7 @@ import java.util.Random;
 
 import org.springframework.util.Assert;
 
-public class ImonociPageHelper {
+public class IconomiPageHelper {
 	
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMM d, y, h:mm:ss a").withLocale(Locale.US);
 

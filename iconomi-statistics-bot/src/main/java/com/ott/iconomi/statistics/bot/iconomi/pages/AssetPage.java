@@ -1,10 +1,10 @@
-package com.ott.iconomi.statistics.bot.imonoci.pages;
+package com.ott.iconomi.statistics.bot.iconomi.pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.ott.iconomi.statistics.bot.imonoci.Navigate;
+import com.ott.iconomi.statistics.bot.iconomi.Navigate;
 public class AssetPage extends AbstractImonociPage {
 
 	

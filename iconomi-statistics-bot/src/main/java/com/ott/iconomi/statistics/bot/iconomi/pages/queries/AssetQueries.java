@@ -1,4 +1,4 @@
-package com.ott.iconomi.statistics.bot.imonoci.pages.queries;
+package com.ott.iconomi.statistics.bot.iconomi.pages.queries;
 
 import java.text.MessageFormat;
 

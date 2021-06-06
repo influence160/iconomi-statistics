@@ -1,6 +1,6 @@
-package com.ott.iconomi.statistics.bot.imonoci.pages;
+package com.ott.iconomi.statistics.bot.iconomi.pages;
 
-import com.ott.iconomi.statistics.bot.imonoci.pages.queries.StrategiesQueries;
+import com.ott.iconomi.statistics.bot.iconomi.pages.queries.StrategiesQueries;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
-import com.ott.iconomi.statistics.bot.imonoci.Navigate;
+import com.ott.iconomi.statistics.bot.iconomi.Navigate;
 import com.ott.iconomi.statistics.domain.model.Snapshot;
 import com.ott.iconomi.statistics.domain.model.Strategy;
 

@@ -10,9 +10,9 @@ import java.util.Date;
 import java.util.Locale;
 
 
-import com.ott.iconomi.statistics.bot.imonoci.ImonociPageHelper;
-import com.ott.iconomi.statistics.bot.imonoci.pages.queries.AssetQueries;
-import com.ott.iconomi.statistics.bot.imonoci.pages.queries.StrategiesQueries;
+import com.ott.iconomi.statistics.bot.iconomi.IconomiPageHelper;
+import com.ott.iconomi.statistics.bot.iconomi.pages.queries.AssetQueries;
+import com.ott.iconomi.statistics.bot.iconomi.pages.queries.StrategiesQueries;
 
 public class Test {
 
@@ -24,7 +24,7 @@ public class Test {
 	private static void TestParseFloat() throws ParseException {
 		System.out.println(new Float(12.26));
 		System.out.println(new Float("12.26"));
-		System.out.println(ImonociPageHelper.returnPercentTextToFloat("+12.26%"));
+		System.out.println(IconomiPageHelper.returnPercentTextToFloat("+12.26%"));
 		System.out.println(new DecimalFormat("+#,##0.00;-#,##0.00").parse("+12.26%".substring(0, "+12.26%".length() - 1)).doubleValue());
 		DecimalFormat df = new DecimalFormat("+#,##0.00;-#,##0.00");
 		df.setParseBigDecimal(true);

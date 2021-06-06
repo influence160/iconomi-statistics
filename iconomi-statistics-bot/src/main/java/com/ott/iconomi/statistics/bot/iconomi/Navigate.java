@@ -1,4 +1,4 @@
-package com.ott.iconomi.statistics.bot.imonoci;
+package com.ott.iconomi.statistics.bot.iconomi;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -6,11 +6,11 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static com.ott.iconomi.statistics.bot.imonoci.ImonociPageHelper.*;
+import static com.ott.iconomi.statistics.bot.iconomi.IconomiPageHelper.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import static com.ott.iconomi.statistics.bot.imonoci.ImonociUriHelper.*;
+import static com.ott.iconomi.statistics.bot.iconomi.IconomiUriHelper.*;
 
 @Component
 public class Navigate {
