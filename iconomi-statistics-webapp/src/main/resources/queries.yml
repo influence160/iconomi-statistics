@@ -1,0 +1,117 @@
+iconomi:
+  statistics:
+    webapp:
+      queries:
+        -
+          label: list snapshots
+          description: list snapshots
+          value: select * from snapshot;
+        -
+          label: list strategies
+          description: list strategies
+          value: select * from strategy;
+        -
+          label: all structures with elements
+          description: all structures with elements
+          value: select * from (
+            (select cs.id as id, cs.snapshot_id as snapshot_id, se.* from current_structure cs
+            join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+            join surt.structure_element se ON se.id = cse.elements_id)
+            union
+
+            (select sh.id as id, sh.snapshot_id, se.* as snapshot_id from structure_historical sh
+            join structure_historical_elements she ON she.structure_historical_entity_id = sh.id
+            join surt.structure_element se ON se.id = she.elements_id)
+            ) as struc_and_el;
+        -
+          label: comparaison of capitalisation per ccy between the last two snapshots
+          description: get the percentage of change of the percentage of thecapitalisation on each ccy ordered 
+            (percent2 - percent1) * 100 /(percent2 + y.percent2)
+          value: select to_char(((x.percent - y.percent) * 100 /(x.percent + y.percent)), 'S999.99') as percent, x.ccy from
+            (select sum(se.percent) as percent, se.asset_id as ccy from surt.current_structure cs
+            join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+            join surt.structure_element se ON se.id = cse.elements_id
+            where cs.snapshot_id = (
+              select max(id) from snapshot
+            )
+            group by se.asset_id order by 1 desc) x
+            join
+            (select sum(se.percent) as percent, se.asset_id as ccy from surt.structure_historical cs
+            join surt.structure_historical_elements cse ON cse.structure_historical_entity_id = cs.id
+            join surt.structure_element se ON se.id = cse.elements_id
+            where cs.snapshot_id = (
+              select max(id) from snapshot where id < (select max(id) from snapshot)
+            )
+            group by se.asset_id order by 1 desc) y
+            on x.ccy = y.ccy
+            order by 1 desc;
+        -
+          label: percent of capitalisation by ccy
+          description: percentage of the capitalisation on each ccy ordered
+          value: select to_char((sum(se.percent)*100/((select sum(se2.percent) from current_structure cs2
+                                       join surt.current_structure_elements cse2 ON cse2.current_structure_entity_id = cs2.id
+                                       join surt.structure_element se2 ON se2.id = cse2.elements_id))), '99999.99') as capitalisation_percent
+                     , se.asset_id  from surt.current_structure cs
+                                             join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+                                             join surt.structure_element se ON se.id = cse.elements_id
+                group by se.asset_id order by 1 desc;
+        -
+          label: the above 2 queries combined
+          description: percentage of changement of capitalisation (percentage_change_capitalisation) and percentage of capitalisation (percentage_capitalisation)
+              on each ccy and rank by capitalisation (rank_by_capitalisation) ordered by percentage_change_capitalisation
+          value: select  x.ccy, to_char(((x.percent - y.percent) * 100 /(x.percent + y.percent)), 'S999.99') as percentage_change_capitalisation,
+                    x.rownumber as rank_by_capitalisation,
+                            to_char((x.percent * 100 /
+                            (
+                            select sum(se2.percent) from current_structure cs2
+                            join surt.current_structure_elements cse2 ON cse2.current_structure_entity_id = cs2.id
+                            join surt.structure_element se2 ON se2.id = cse2.elements_id
+                            )
+                            ), '990.9999999') as percentage_capitalisation
+                            from
+                    (
+                      select xx.*, row_number() OVER (ORDER BY 1) AS rownumber from 
+                        (select sum(se.percent) as percent, se.asset_id as ccy from surt.current_structure cs
+                        join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+                        join surt.structure_element se ON se.id = cse.elements_id
+                        where cs.snapshot_id = (
+                        select max(id) from snapshot
+                        )
+                        group by se.asset_id order by 1 desc) xx
+                     ) as x
+                            join
+                            (select sum(se.percent) as percent, se.asset_id as ccy from surt.structure_historical cs
+                            join surt.structure_historical_elements cse ON cse.structure_historical_entity_id = cs.id
+                            join surt.structure_element se ON se.id = cse.elements_id
+                            where cs.snapshot_id = (
+                            select max(id) from snapshot where id < (select max(id) from snapshot)
+                            )
+                            group by se.asset_id order by 1 desc) y
+                            on x.ccy = y.ccy
+                            order by 2 desc;
+        -
+          label: ccys being present in with more than 30% in structures and in haw many structure
+          description: ccys being present in with more than 30% in structures and in haw many structure
+          value: select se.asset_id, count(*) as count from snapshot s
+                join current_structure cs on cs.snapshot_id = s.id
+                join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+                join surt.structure_element se ON se.id = cse.elements_id and se.percent > 30
+                where s.id = (
+                select max(id) from snapshot
+                )
+                group by se.asset_id
+                order by 2 desc;
+        -
+          label: ccys being present in with more than 70% in structures and in haw many structure
+          description: ccys being present in with more than 70% in structures and in haw many structure
+          value: select se.asset_id, count(*) as count from snapshot s
+                join current_structure cs on cs.snapshot_id = s.id
+                join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+                join surt.structure_element se ON se.id = cse.elements_id and se.percent > 70
+                where s.id = (
+                select max(id) from snapshot
+                )
+                group by se.asset_id
+                order by 2 desc;
+        
+
