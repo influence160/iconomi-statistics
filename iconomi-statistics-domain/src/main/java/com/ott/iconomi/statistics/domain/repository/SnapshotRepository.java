@@ -42,4 +42,7 @@ public class SnapshotRepository implements DomainRepository<Snapshot> {
 		return conversionService.convert(snapshotEntity, Snapshot.class);
 	}
 
+    public int count() {
+		return (int) entityRepository.count();
+    }
 }

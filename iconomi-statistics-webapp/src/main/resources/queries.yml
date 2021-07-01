@@ -70,7 +70,7 @@ iconomi:
                             ), '990.9999999') as percentage_capitalisation
                             from
                     (
-                      select xx.*, row_number() OVER (ORDER BY 1) AS rownumber from 
+                      select xx.*, row_number() OVER (ORDER BY 1) AS rownumber from
                         (select sum(se.percent) as percent, se.asset_id as ccy from surt.current_structure cs
                         join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
                         join surt.structure_element se ON se.id = cse.elements_id
@@ -89,6 +89,80 @@ iconomi:
                             group by se.asset_id order by 1 desc) y
                             on x.ccy = y.ccy
                             order by 2 desc;
+        -
+          label: the same but taking only structures with more than 30 changes in the last 30 days
+          description: percentage of changement of capitalisation (percentage_change_capitalisation) and percentage of capitalisation (percentage_capitalisation)
+            on each ccy and rank by capitalisation (rank_by_capitalisation) ordered by percentage_change_capitalisation
+          value: select  x.ccy, to_char(((x.percent - y.percent) * 100 /(x.percent + y.percent)), 'S999.99') as percentage_change_capitalisation,
+                      x.rownumber as rank_by_capitalisation,
+                      to_char((x.percent * 100 /
+                      (
+                      select sum(se2.percent) from current_structure cs2
+                      join surt.current_structure_elements cse2 ON cse2.current_structure_entity_id = cs2.id
+                      join surt.structure_element se2 ON se2.id = cse2.elements_id
+              where cs2.number_of_changes_in_last30days > 30
+              )
+              ), '990.9999999') as percentage_capitalisation
+              from
+              (
+              select xx.*, row_number() OVER (ORDER BY 1) AS rownumber from
+              (select sum(se.percent) as percent, se.asset_id as ccy from surt.current_structure cs
+              join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+              join surt.structure_element se ON se.id = cse.elements_id
+              where cs.snapshot_id = (
+              select max(id) from snapshot
+              )
+              and cs.number_of_changes_in_last30days > 30
+              group by se.asset_id order by 1 desc) xx
+              ) as x
+              join
+              (select sum(se.percent) as percent, se.asset_id as ccy from surt.structure_historical cs
+              join surt.structure_historical_elements cse ON cse.structure_historical_entity_id = cs.id
+              join surt.structure_element se ON se.id = cse.elements_id
+              where cs.snapshot_id = (
+              select max(id) from snapshot where id < (select max(id) from snapshot)
+              )
+              and cs.number_of_changes_in_last30days > 30
+              group by se.asset_id order by 1 desc) y
+              on x.ccy = y.ccy
+              order by 2 desc;
+        -
+          label: the same but taking only structures with more than 50 changes in the last 30 days
+          description: percentage of changement of capitalisation (percentage_change_capitalisation) and percentage of capitalisation (percentage_capitalisation)
+            on each ccy and rank by capitalisation (rank_by_capitalisation) ordered by percentage_change_capitalisation
+          value: select  x.ccy, to_char(((x.percent - y.percent) * 100 /(x.percent + y.percent)), 'S999.99') as percentage_change_capitalisation,
+              x.rownumber as rank_by_capitalisation,
+              to_char((x.percent * 100 /
+              (
+              select sum(se2.percent) from current_structure cs2
+              join surt.current_structure_elements cse2 ON cse2.current_structure_entity_id = cs2.id
+              join surt.structure_element se2 ON se2.id = cse2.elements_id
+              where cs2.number_of_changes_in_last30days > 50
+              )
+              ), '990.9999999') as percentage_capitalisation
+              from
+              (
+              select xx.*, row_number() OVER (ORDER BY 1) AS rownumber from
+              (select sum(se.percent) as percent, se.asset_id as ccy from surt.current_structure cs
+              join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+              join surt.structure_element se ON se.id = cse.elements_id
+              where cs.snapshot_id = (
+              select max(id) from snapshot
+              )
+              and cs.number_of_changes_in_last30days > 50
+              group by se.asset_id order by 1 desc) xx
+              ) as x
+              join
+              (select sum(se.percent) as percent, se.asset_id as ccy from surt.structure_historical cs
+              join surt.structure_historical_elements cse ON cse.structure_historical_entity_id = cs.id
+              join surt.structure_element se ON se.id = cse.elements_id
+              where cs.snapshot_id = (
+              select max(id) from snapshot where id < (select max(id) from snapshot)
+              )
+              and cs.number_of_changes_in_last30days > 50
+              group by se.asset_id order by 1 desc) y
+              on x.ccy = y.ccy
+              order by 2 desc;
         -
           label: ccys being present in with more than 30% in structures and in haw many structure
           description: ccys being present in with more than 30% in structures and in haw many structure

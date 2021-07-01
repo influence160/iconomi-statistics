@@ -19,6 +19,8 @@
         <module>iconomi-statistics-data</module>
         <module>iconomi-statistics-domain</module>
         <module>iconomi-statistics-bot</module>
+        <module>iconomi-statistics-data-importer</module>
+        <module>iconomi-statistics-scheduler</module>
         <module>iconomi-statistics-webapp</module>
     </modules>
 	

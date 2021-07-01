@@ -2,10 +2,7 @@ package com.ott.iconomi.statistics.bot.iconomi.pages;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +18,7 @@ public class LoginPage extends AbstractImonociPage {
 	
 
 	public void login(String login, String pws) {
+		driver.switchTo().newWindow(WindowType.TAB);
 		navigate.to(IconomiUriHelper.getLoginUrl());
 //            driver.findElement(By.name("q")).sendKeys("cheese" + Keys.ENTER);
         WebElement firstResult = wait.until(presenceOfElementLocated(By.className("icon-cancel")));

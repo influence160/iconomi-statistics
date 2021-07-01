@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 import com.ott.iconomi.statistics.bot.iconomi.IconomiPageHelper;
 import com.ott.iconomi.statistics.bot.iconomi.pages.LoginPage;
 import com.ott.iconomi.statistics.bot.iconomi.pages.StrategiesPage;
+import com.ott.iconomi.statistics.domain.repository.SnapshotRepository;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -21,53 +22,20 @@ import java.time.LocalDateTime;
 
 @Component
 @Slf4j
-@Transactional
 public class SurtBotApplicationRunner implements ApplicationRunner {
-	
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
 
 	@Autowired
-	private WebDriver webDriver;
+	BotDataImporter botDataImporter;
 
 	@Autowired
-	private LoginPage loginPage;
-	@Autowired
-	private StrategiesPage strategiesPage;
-	
+	WebDriver webDriver;
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		try {
-			String login = args.getOptionValues("login").get(0);
-			String pws = args.getOptionValues("pwd").get(0);
-			Snapshot.SnapshotBuilder snapshotBuilder = Snapshot.builder();
-			snapshotBuilder.startTime(LocalDateTime.now());
-			doExtraction(login, pws, snapshotBuilder);
-
-			saveSnapshotAfterEnd(snapshotBuilder);
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			webDriver.quit();
-		}
+		String login = args.getOptionValues("login").get(0);
+		String pwd = args.getOptionValues("pwd").get(0);
+		botDataImporter.importData(login, pwd);
+		webDriver.quit();
 	}
-
-	private void doExtraction(String login, String pws, Snapshot.SnapshotBuilder snapshot) {
-		log.debug("login with " + login +  "/*******");
-        IconomiPageHelper.waitAMoment();
-		loginPage.login(login, pws);
-		strategiesPage.takeASnapshot(snapshot);
-	}
-
-	public void saveSnapshotAfterEnd(Snapshot.SnapshotBuilder snapshotBuilder) {
-		snapshotBuilder.failed(false);
-		Snapshot snapshot = snapshotBuilder.build();
-		log.info("Snapshot Taken with " + snapshot.getStrategies().size() + " strategies and " + snapshot.getCurrentStructures().size() + " structures.");
-		log.debug("snapshot = " + snapshot  + "\nstrategies = " + snapshot.getStrategies() + "\nstructures = " + snapshot.getCurrentStructures());
-		SnapshotTakenEvent event = new SnapshotTakenEvent(this, snapshot);
-		applicationEventPublisher.publishEvent(event);
-	}
-	
-
 
 }
