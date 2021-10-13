@@ -5,7 +5,7 @@ import java.text.MessageFormat;
 public abstract class AssetQueries {
 
 	public static final String STRATEGY_NAME = "//app-strategy-detail//app-asset-logo-placeholder[@class='w-100'][1]/following-sibling::p[1]";
-	public static final String STRATEGY_MANAGER = "//app-strategy-detail//app-asset-logo-placeholder[@class='w-100'][1]/following-sibling::p[2]";
+	public static final String STRATEGY_MANAGER = "//app-strategy-detail//app-asset-logo-placeholder[@class='w-100'][1]/following-sibling::a[1]";
 	public static final String STRATEGY_FAVORITES = "//app-strategy-detail//app-asset-logo-placeholder[@class='w-100'][1]/following-sibling::div[1]/i";
 	
 	public static enum ReturnType {

@@ -1,3 +1,8 @@
+
+##Load datas from iconomi using selenium
+
+**_This project is deprecated and was replaced by iconomi-statistics-data-importer_**
+
 run with 
 VM Arguments : -Dspring.config.import=classpath:datasource.properties login password
 program arguments : --login=xxxxxxxxx --pwd=yyyyyyyyyy

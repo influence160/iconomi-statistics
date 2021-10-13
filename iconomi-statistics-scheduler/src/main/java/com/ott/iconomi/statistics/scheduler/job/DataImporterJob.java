@@ -19,6 +19,10 @@ public class DataImporterJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        jobService.importData();
+        try {
+            jobService.importData();
+        } catch (Exception e) {
+            throw new JobExecutionException(e);
+        }
     }
 }

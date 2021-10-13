@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(SurtBotProperties.class)
 public class SurtBotConfiguration {
 
+	public static final int IMPLICIT_WAIT = 300;
+
 	public static void main(String[] args) {
 		System.out.println("test");
 
@@ -65,8 +67,8 @@ public class SurtBotConfiguration {
 				break;
 			default : throw new IllegalArgumentException("valeur invalide " + properties.getWebdriver().getImpl());
 		}
-	    driver.manage().timeouts().pageLoadTimeout(Duration.of(300, ChronoUnit.SECONDS));
-	    driver.manage().timeouts().implicitlyWait(Duration.of(300, ChronoUnit.SECONDS));
+	    driver.manage().timeouts().pageLoadTimeout(Duration.of(IMPLICIT_WAIT, ChronoUnit.SECONDS));
+	    driver.manage().timeouts().implicitlyWait(Duration.of(IMPLICIT_WAIT, ChronoUnit.SECONDS));
 	    return driver;
 	}
 	

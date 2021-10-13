@@ -14,11 +14,18 @@ import lombok.Value;
 public class Asset {
 	
 	public static final String OTHER_ASSETS_CCY = "OTHERS";
+
+	public static final String OTHER_ASSETS_NAME = "Other Assets";
 	
 	public static final Set<String> STABLE_CCYS = Stream.of("USDT", "USDC", "TUSD", "DAI", "UST").collect(Collectors.toSet());
 	
 	public static Asset of(String ccy) {
 		return new AssetBuilder().ccy(ccy).build();
+	}
+
+	public Asset(String ccy, String name) {
+		this.ccy = ccy;
+		this.name = name;
 	}
 
 	private String ccy;
