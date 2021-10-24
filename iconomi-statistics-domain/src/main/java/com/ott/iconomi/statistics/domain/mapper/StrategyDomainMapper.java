@@ -12,7 +12,8 @@ import com.ott.iconomi.statistics.data.entity.StrategyEntity;
 public interface StrategyDomainMapper extends Converter<Strategy, StrategyEntity> {
 
 	@Mapping(target = "currentStructure", ignore = true)
-	public StrategyEntity convert(Strategy domain);
+	@Override
+	StrategyEntity convert(Strategy domain);
 
 //	@AfterMapping
 //	public default void afterMapping(Strategy strategy, @MappingTarget StrategyEntity target) {

@@ -10,5 +10,6 @@ import com.ott.iconomi.statistics.data.entity.StructureElementEntity;
 @Mapper(config = MapperSpringConfiguration.class)
 public interface StructureElementEntityMapper extends Converter<StructureElementEntity, StructureElement>{
 
+    @Override
     public StructureElement convert(StructureElementEntity entity);
 }

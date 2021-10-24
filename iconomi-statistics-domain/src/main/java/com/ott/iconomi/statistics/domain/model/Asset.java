@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import lombok.EqualsAndHashCode;
 import org.springframework.core.style.ToStringCreator;
 
 import lombok.Builder;
@@ -11,6 +12,7 @@ import lombok.Value;
 
 @Value
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Asset {
 	
 	public static final String OTHER_ASSETS_CCY = "OTHERS";
@@ -28,6 +30,7 @@ public class Asset {
 		this.name = name;
 	}
 
+	@EqualsAndHashCode.Include
 	private String ccy;
 	
 	private String name;

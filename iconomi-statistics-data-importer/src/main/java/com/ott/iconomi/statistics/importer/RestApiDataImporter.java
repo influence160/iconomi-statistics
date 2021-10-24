@@ -1,7 +1,7 @@
 package com.ott.iconomi.statistics.importer;
 
 import com.ott.iconomi.statistics.domain.events.SnapshotTakenEvent;
-import com.ott.iconomi.statistics.domain.model.Snapshot;
+import com.ott.iconomi.statistics.domain.model.*;
 import com.ott.iconomi.statistics.domain.repository.SnapshotRepository;
 import com.ott.iconomi.statistics.importer.dataload.converter.StrategyConverter;
 import com.ott.iconomi.statistics.importer.utils.IOFunction;
@@ -11,7 +11,6 @@ import net.iconomi.api.client.IconomiApiBuilder;
 import net.iconomi.api.client.IconomiRestApi;
 import net.iconomi.api.client.model.Strategy;
 import net.iconomi.api.client.model.Structure;
-import net.iconomi.api.client.model.StructureElement;
 import net.iconomi.api.client.model.Ticker;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -69,7 +68,31 @@ public class RestApiDataImporter {
             }
             Set<com.ott.iconomi.statistics.domain.model.Strategy> strategiesSet = new HashSet<>(domainStrategies);
             snapshotBuilder.strategies(strategiesSet);
-            snapshotBuilder.currentStructures(strategiesSet.stream().map(com.ott.iconomi.statistics.domain.model.Strategy::getCurrentStructure).collect(Collectors.toList()));
+            List<CurrentStructure> currentStructures = strategiesSet.stream().map(com.ott.iconomi.statistics.domain.model.Strategy::getCurrentStructure).collect(Collectors.toList());
+            snapshotBuilder.currentStructures(currentStructures);
+
+            //get Prices
+            Set<Asset> assets = strategiesSet.stream().map(com.ott.iconomi.statistics.domain.model.Strategy::getCurrentStructure)
+                    .flatMap(cs -> cs.getElements().stream())
+                    .map(StructureElement::getAsset)
+                    .collect(Collectors.toSet());
+            List<PriceHistory> priceHistories = new ArrayList<>(assets.size());
+            for (Asset asset : assets) {
+                if (!Asset.OTHER_ASSETS_CCY.equals(asset.getCcy())){
+                    requestsLimitChecker.checkBeforeRequests(1);
+                    log.trace("loading asset " + asset.getCcy());
+                    Ticker ticker = repeatUntilNotNull(getRestApi()::getAssetPriceChanges, asset.getCcy());
+                    Assert.notNull(ticker, "ticker is null.");
+                    PriceHistory.PriceHistoryBuilder priceHistoryBuilder = PriceHistory.builder();
+                    priceHistoryBuilder.asset(asset);
+                    priceHistoryBuilder.usdPrice(ticker.getPrice().doubleValue());
+                    priceHistories.add(priceHistoryBuilder.build());
+                }
+            }
+            snapshotBuilder.prices(priceHistories);
+
+            currentStructures.forEach(currentStructure -> currentStructure.calculateElementsQuantityAndUsdValue(priceHistories));
+
             saveSnapshotAfterEnd(snapshotBuilder);
         } catch (Exception e) {
             throw e;

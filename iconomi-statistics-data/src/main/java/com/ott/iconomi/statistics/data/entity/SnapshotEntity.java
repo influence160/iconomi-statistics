@@ -3,15 +3,7 @@ package com.ott.iconomi.statistics.data.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.core.style.ToStringCreator;
 
@@ -22,6 +14,7 @@ public class SnapshotEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "snapshotsec")
+	@SequenceGenerator(name = "snapshotsec", sequenceName = "snapshotsec", allocationSize = 1)
 	private int id;
 	
 	private LocalDateTime startTime;
@@ -39,6 +32,9 @@ public class SnapshotEntity {
 
 	@OneToMany(mappedBy = "snapshot", fetch = FetchType.LAZY)
 	private List<StructureHistoricalEntity> structureHistoricals;
+
+	@OneToMany(mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+	private List<PriceHistoryEntity> prices;
 		
 	@PrePersist
 	private void preInsert() {
@@ -116,6 +112,14 @@ public class SnapshotEntity {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public List<PriceHistoryEntity> getPrices() {
+		return prices;
+	}
+
+	public void setPrices(List<PriceHistoryEntity> prices) {
+		this.prices = prices;
 	}
 
 	public String toString() {

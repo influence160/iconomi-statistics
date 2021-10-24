@@ -22,8 +22,8 @@ public class CurrentStructure extends Structure {
 	private List<StructureHistorical> structureHistoricals;
 
 	@Builder
-	public CurrentStructure(int id, Float dayReturn, Float weekReturn, Float monthReturn, Float yearReturn, Float allTimeReturn, LocalDateTime lastChange, int numberOfChangesInLast30Days, LocalDateTime dateCreated, LocalDate dateStarted, List<StructureElement> elements, Snapshot snapshot, LocalDateTime dateUpdated, String strategyShortName, List<StructureHistorical> structureHistoricals) {
-		super(id, dayReturn, weekReturn, monthReturn, yearReturn, allTimeReturn, lastChange, numberOfChangesInLast30Days, dateCreated, dateStarted, elements, snapshot);
+	public CurrentStructure(int id, Float dayReturn, Float weekReturn, Float monthReturn, Float yearReturn, Float allTimeReturn, double aum, LocalDateTime lastChange, int numberOfChangesInLast30Days, LocalDateTime dateCreated, LocalDate dateStarted, List<StructureElement> elements, Snapshot snapshot, LocalDateTime dateUpdated, String strategyShortName, List<StructureHistorical> structureHistoricals) {
+		super(id, dayReturn, weekReturn, monthReturn, yearReturn, allTimeReturn, aum, lastChange, numberOfChangesInLast30Days, dateCreated, dateStarted, elements, snapshot);
 		this.dateUpdated = dateUpdated;
 		this.strategyShortName = strategyShortName;
 		this.structureHistoricals = structureHistoricals;

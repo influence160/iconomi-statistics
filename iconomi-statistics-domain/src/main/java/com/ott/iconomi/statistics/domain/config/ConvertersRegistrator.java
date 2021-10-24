@@ -24,8 +24,10 @@ public class ConvertersRegistrator implements ApplicationListener<ContextRefresh
     /*@Autowired */ StructureElementEntityMapper structureElementEntityMapper;
     /*@Autowired */ StructureHistoricalDomainMapper structureHistoricalDomainMapper;
     /*@Autowired */ StructureHistoricalEntityMapper structureHistoricalEntityMapper;
+    PriceHistoryDomainMapper priceHistoryDomainMapper;
+    PriceHistoryEntityMapper priceHistoryEntityMapper;
 
-    public ConvertersRegistrator(ConverterRegistry conversionService, AssetDomainMapper assetDomainMapper, AssetEntityMapper assetEntityMapper, CurrentStructureDomainMapper currentStructureDomainMapper, CurrentStructureEntityMapper currentStructureEntityMapper, SnapshotDomainMapper snapshotDomainMapper, SnapshotEntityMapper snapshotEntityMapper, StrategyDomainMapper strategyDomainMapper, StrategyEntityMapper strategyEntityMapper, StructureElementDomainMapper structureElementDomainMapper, StructureElementEntityMapper structureElementEntityMapper, StructureHistoricalDomainMapper structureHistoricalDomainMapper, StructureHistoricalEntityMapper structureHistoricalEntityMapper) {
+    public ConvertersRegistrator(ConverterRegistry conversionService, AssetDomainMapper assetDomainMapper, AssetEntityMapper assetEntityMapper, CurrentStructureDomainMapper currentStructureDomainMapper, CurrentStructureEntityMapper currentStructureEntityMapper, SnapshotDomainMapper snapshotDomainMapper, SnapshotEntityMapper snapshotEntityMapper, StrategyDomainMapper strategyDomainMapper, StrategyEntityMapper strategyEntityMapper, StructureElementDomainMapper structureElementDomainMapper, StructureElementEntityMapper structureElementEntityMapper, StructureHistoricalDomainMapper structureHistoricalDomainMapper, StructureHistoricalEntityMapper structureHistoricalEntityMapper, PriceHistoryDomainMapper priceHistoryDomainMapper, PriceHistoryEntityMapper priceHistoryEntityMapper) {
         this.conversionService = conversionService;
         this.assetDomainMapper = assetDomainMapper;
         this.assetEntityMapper = assetEntityMapper;
@@ -39,6 +41,8 @@ public class ConvertersRegistrator implements ApplicationListener<ContextRefresh
         this.structureElementEntityMapper = structureElementEntityMapper;
         this.structureHistoricalDomainMapper = structureHistoricalDomainMapper;
         this.structureHistoricalEntityMapper = structureHistoricalEntityMapper;
+        this.priceHistoryDomainMapper = priceHistoryDomainMapper;
+        this.priceHistoryEntityMapper = priceHistoryEntityMapper;
     }
 
     @Override
@@ -56,5 +60,7 @@ public class ConvertersRegistrator implements ApplicationListener<ContextRefresh
         conversionService.addConverter(structureElementEntityMapper);
         conversionService.addConverter(structureHistoricalDomainMapper);
         conversionService.addConverter(structureHistoricalEntityMapper);
+        conversionService.addConverter(priceHistoryDomainMapper);
+        conversionService.addConverter(priceHistoryEntityMapper);
     }
 }

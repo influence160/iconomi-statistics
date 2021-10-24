@@ -10,5 +10,6 @@ import com.ott.iconomi.statistics.data.entity.StructureHistoricalEntity;
 @Mapper(config = MapperSpringConfiguration.class)
 public interface StructureHistoricalDomainMapper extends Converter<StructureHistorical, StructureHistoricalEntity> {
 
+    @Override
     public StructureHistoricalEntity convert(StructureHistorical domain);
 }

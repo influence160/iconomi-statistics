@@ -17,8 +17,8 @@ public class StructureHistorical extends Structure{
 
 	@Builder()
 
-	public StructureHistorical(int id, Float dayReturn, Float weekReturn, Float monthReturn, Float yearReturn, Float allTimeReturn, LocalDateTime lastChange, int numberOfChangesInLast30Days, LocalDateTime dateCreated, LocalDate dateStarted, List<StructureElement> elements, Snapshot snapshot, CurrentStructure currentStructure) {
-		super(id, dayReturn, weekReturn, monthReturn, yearReturn, allTimeReturn, lastChange, numberOfChangesInLast30Days, dateCreated, dateStarted, elements, snapshot);
+	public StructureHistorical(int id, Float dayReturn, Float weekReturn, Float monthReturn, Float yearReturn, Float allTimeReturn, double aum, LocalDateTime lastChange, int numberOfChangesInLast30Days, LocalDateTime dateCreated, LocalDate dateStarted, List<StructureElement> elements, Snapshot snapshot, CurrentStructure currentStructure) {
+		super(id, dayReturn, weekReturn, monthReturn, yearReturn, allTimeReturn, aum, lastChange, numberOfChangesInLast30Days, dateCreated, dateStarted, elements, snapshot);
 		this.currentStructure = currentStructure;
 	}
 }

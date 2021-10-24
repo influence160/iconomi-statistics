@@ -1,14 +1,6 @@
 package com.ott.iconomi.statistics.data.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.core.style.ToStringCreator;
 
@@ -18,13 +10,22 @@ public class StructureElementEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "structureelementsec")
+	@SequenceGenerator(name = "structureelementsec", sequenceName = "structureelementsec", allocationSize = 1)
 	private int id;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "asset_id")
 	private AssetEntity asset;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "price_id")
+	private PriceHistoryEntity price;
 	
 	private float percent;
+
+	private Double usdValue;
+
+	private Double quantity;
 
 	
 	@PreUpdate
@@ -49,6 +50,14 @@ public class StructureElementEntity {
 		this.asset = asset;
 	}
 
+	public PriceHistoryEntity getPrice() {
+		return price;
+	}
+
+	public void setPrice(PriceHistoryEntity price) {
+		this.price = price;
+	}
+
 	public float getPercent() {
 		return percent;
 	}
@@ -56,7 +65,22 @@ public class StructureElementEntity {
 	public void setPercent(float percent) {
 		this.percent = percent;
 	}
-	
+
+	public Double getUsdValue() {
+		return usdValue;
+	}
+
+	public void setUsdValue(Double usdValue) {
+		this.usdValue = usdValue;
+	}
+
+	public Double getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Double quantity) {
+		this.quantity = quantity;
+	}
 
 	public String toString() {
 		return new ToStringCreator(this)

@@ -33,6 +33,7 @@ public class StrategyConverter {
                 .monthReturn(ticker.getChange1m() != null ? ticker.getChange1m().floatValue() * 100 : null)
                 .yearReturn(ticker.getChange12m() != null ? ticker.getChange12m().floatValue() * 100 : null)
                 .allTimeReturn(ticker.getChangeAll() != null ? ticker.getChangeAll().floatValue() * 100 : null)
+                .aum(ticker.getAum().doubleValue())
                 .lastChange(ConverterHelper.epochSecondToLocalDateTime(structure.getLastRebalanced()))
                 .numberOfChangesInLast30Days(structure.getMonthlyRebalancedCount());
 

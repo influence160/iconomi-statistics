@@ -38,7 +38,9 @@ public class Snapshot {
 	
 	private Set<Strategy> strategies;
 
-	public Snapshot(int id, LocalDateTime startTime, LocalDateTime endTime, boolean failed, String failMessage, String comment, List<CurrentStructure> currentStructures, List<StructureHistorical> structureHistoricals, Set<Strategy> strategies) {
+	private List<PriceHistory> prices;
+
+	public Snapshot(int id, LocalDateTime startTime, LocalDateTime endTime, boolean failed, String failMessage, String comment, List<CurrentStructure> currentStructures, List<StructureHistorical> structureHistoricals, Set<Strategy> strategies, List<PriceHistory> prices) {
 		this.id = id;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -49,11 +51,15 @@ public class Snapshot {
 		//et si c mieux dans le builder
 		this.structureHistoricals = structureHistoricals;
 		this.strategies = strategies;
+		this.prices = prices;
 		if (currentStructures != null) {
 			currentStructures.forEach(c -> c.snapshot = this);
 		}
 		if (structureHistoricals != null) {
 			currentStructures.forEach(c -> c.snapshot = this);
+		}
+		if (prices != null) {
+			prices.forEach(p -> p.snapshot = this);
 		}
 	}
 

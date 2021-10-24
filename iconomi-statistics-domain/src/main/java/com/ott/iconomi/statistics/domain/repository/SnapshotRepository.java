@@ -1,5 +1,9 @@
 package com.ott.iconomi.statistics.domain.repository;
 
+import com.ott.iconomi.statistics.data.entity.PriceHistoryEntity;
+import com.ott.iconomi.statistics.data.repository.AssetEntityRepository;
+import com.ott.iconomi.statistics.data.repository.PriceHistoryEntityRepository;
+import com.ott.iconomi.statistics.domain.model.PriceHistory;
 import com.ott.iconomi.statistics.domain.model.Strategy;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
@@ -18,28 +22,36 @@ public class SnapshotRepository implements DomainRepository<Snapshot> {
 	private StrategyRepository strategyRepository;
 	private ConversionService conversionService;
 	private CurrentStructureRepository currentStructureRepository;
+	private AssetEntityRepository assetEntityRepository;
+	private PriceHistoryEntityRepository priceHistoryEntityRepository;
 
-	public SnapshotRepository(SnapshotEntityRepository entityRepository, StrategyRepository strategyRepository, ConversionService conversionService, CurrentStructureRepository currentStructureRepository) {
+	public SnapshotRepository(SnapshotEntityRepository entityRepository, StrategyRepository strategyRepository, ConversionService conversionService, CurrentStructureRepository currentStructureRepository, PriceHistoryEntityRepository priceHistoryEntityRepository, AssetEntityRepository assetEntityRepository) {
 		this.entityRepository = entityRepository;
 		this.strategyRepository = strategyRepository;
 		this.conversionService = conversionService;
 		this.currentStructureRepository = currentStructureRepository;
+		this.priceHistoryEntityRepository = priceHistoryEntityRepository;
+		this.assetEntityRepository = assetEntityRepository;
 	}
 
 	@Transactional
 	public Snapshot save(Snapshot snapshot) {
 
-		SnapshotEntity snapshotEntity = conversionService.convert(snapshot, SnapshotEntity.class);
+		final SnapshotEntity snapshotEntity = conversionService.convert(snapshot, SnapshotEntity.class);
+		snapshotEntity.getPrices().forEach(p -> {
+			p.setSnapshot(snapshotEntity);
+			p.setAsset(assetEntityRepository.save(p.getAsset()));
+		});
 		snapshotEntity.setCurrentStructures(new ArrayList<>());
-		snapshotEntity = entityRepository.save(snapshotEntity);
-		int snapshotId = snapshotEntity.getId();
+		SnapshotEntity snapshotEntitySaved = entityRepository.save(snapshotEntity);
+		int snapshotId = snapshotEntitySaved.getId();
 		snapshot.getCurrentStructures().forEach(currentStructure -> {
 			Strategy strategy = snapshot.getStrategies().stream().filter(s -> s.getShortName().equals(currentStructure.getStrategyShortName()))
 					.findAny().orElseThrow(RuntimeException::new);
 			strategyRepository.save(strategy, currentStructure, snapshotId);
 		});
 
-		return conversionService.convert(snapshotEntity, Snapshot.class);
+		return conversionService.convert(snapshotEntitySaved, Snapshot.class);
 	}
 
     public int count() {

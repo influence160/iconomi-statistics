@@ -15,6 +15,7 @@ public abstract class StructureEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "structuresec")
+	@SequenceGenerator(name = "structuresec", sequenceName = "structuresec", allocationSize = 1)
 	private int id;
 	
 	protected Float dayReturn;
@@ -26,6 +27,8 @@ public abstract class StructureEntity {
 	protected Float yearReturn;
 
 	protected Float allTimeReturn;
+
+	protected Double aum;
 
 	protected LocalDateTime lastChange;
 
@@ -101,6 +104,14 @@ public abstract class StructureEntity {
 
 	public void setLastChange(LocalDateTime lastChange) {
 		this.lastChange = lastChange;
+	}
+
+	public Double getAum() {
+		return aum;
+	}
+
+	public void setAum(Double aum) {
+		this.aum = aum;
 	}
 
 	public int getNumberOfChangesInLast30Days() {

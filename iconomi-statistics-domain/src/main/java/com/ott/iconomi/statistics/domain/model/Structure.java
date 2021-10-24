@@ -27,6 +27,8 @@ public abstract class Structure {
 	private Float yearReturn;
 	
 	private Float allTimeReturn;
+
+	private double aum;
 	
 	private LocalDateTime lastChange;
 	
@@ -39,7 +41,16 @@ public abstract class Structure {
 	private List<StructureElement> elements;
 
 	protected Snapshot snapshot;
-	
+
+	public void calculateElementsQuantityAndUsdValue(List<PriceHistory> prices) {
+		for (StructureElement element: elements) {
+			if (!Asset.OTHER_ASSETS_CCY.equals(element.getAsset().getCcy())) {
+				PriceHistory assetPrice = prices.stream().filter(p -> p.getAsset().equals(element.getAsset()))
+						.findAny().orElseThrow(() -> new NullPointerException("no PriceHistory found for asset " + element.getAsset()));
+				element.calculateQuantityAndUsdValue(aum, assetPrice.getUsdPrice());
+			}
+		}
+	}
 	
 	public String toString() {
 		return new ToStringCreator(this)

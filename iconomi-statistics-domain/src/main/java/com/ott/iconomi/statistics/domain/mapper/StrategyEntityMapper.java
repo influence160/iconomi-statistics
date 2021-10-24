@@ -9,6 +9,7 @@ import com.ott.iconomi.statistics.data.entity.StrategyEntity;
 
 @Mapper(config = MapperSpringConfiguration.class)
 public interface StrategyEntityMapper extends Converter<StrategyEntity, Strategy>{
-	
+
+	@Override
 	public Strategy convert(StrategyEntity entity);
 }

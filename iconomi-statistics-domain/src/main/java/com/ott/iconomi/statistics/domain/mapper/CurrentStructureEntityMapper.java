@@ -13,5 +13,6 @@ public interface CurrentStructureEntityMapper extends Converter<CurrentStructure
 
     @Mapping(target = "snapshot", ignore = true)
     //@Mapping(target = "strategy", ignore = true)//TODO strategy.shortName to strategyShortName
+    @Override
     public CurrentStructure convert(CurrentStructureEntity entity);
 }

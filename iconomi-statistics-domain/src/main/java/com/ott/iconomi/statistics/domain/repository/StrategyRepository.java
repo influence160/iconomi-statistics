@@ -3,6 +3,7 @@ package com.ott.iconomi.statistics.domain.repository;
 import com.ott.iconomi.statistics.data.entity.CurrentStructureEntity;
 import com.ott.iconomi.statistics.data.entity.StructureHistoricalEntity;
 import com.ott.iconomi.statistics.data.repository.*;
+import com.ott.iconomi.statistics.domain.model.Asset;
 import com.ott.iconomi.statistics.domain.model.CurrentStructure;
 import com.ott.iconomi.statistics.domain.model.Strategy;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +23,16 @@ public class StrategyRepository implements DomainRepository<Strategy> {
 	private StructureHistoricalEntityRepository structureHistoricalEntityRepository;
 	private SnapshotEntityRepository snapshotEntityRepository;
 	private AssetEntityRepository assetEntityRepository;
+	private PriceHistoryEntityRepository priceHistoryEntityRepository;
 
-	public StrategyRepository(StrategyEntityRepository strategyEntityRepository, ConversionService conversionService, CurrentStructureEntityRepository currentStructureEntityRepository, StructureHistoricalEntityRepository structureHistoricalEntityRepository, SnapshotEntityRepository snapshotEntityRepository, AssetEntityRepository assetEntityRepository) {
+	public StrategyRepository(StrategyEntityRepository strategyEntityRepository, ConversionService conversionService, CurrentStructureEntityRepository currentStructureEntityRepository, StructureHistoricalEntityRepository structureHistoricalEntityRepository, SnapshotEntityRepository snapshotEntityRepository, AssetEntityRepository assetEntityRepository, PriceHistoryEntityRepository priceHistoryEntityRepository) {
 		this.strategyEntityRepository = strategyEntityRepository;
 		this.conversionService = conversionService;
 		this.currentStructureEntityRepository = currentStructureEntityRepository;
 		this.structureHistoricalEntityRepository = structureHistoricalEntityRepository;
 		this.snapshotEntityRepository = snapshotEntityRepository;
 		this.assetEntityRepository = assetEntityRepository;
+		this.priceHistoryEntityRepository = priceHistoryEntityRepository;
 	}
 
 	public Strategy save(Strategy strategy) {
@@ -46,11 +49,16 @@ public class StrategyRepository implements DomainRepository<Strategy> {
 
 	public void save(Strategy strategy, CurrentStructure currentStructure, int snapshotId) {
 		Assert.state(currentStructure.getStrategyShortName().equals(strategy.getShortName()), "Assertion failed : currentStructure.getStrategyShortName().equals(strategy.getShortName())");
+
 		CurrentStructureEntity currentStructureEntity = conversionService.convert(currentStructure, CurrentStructureEntity.class);
 		currentStructureEntity.setSnapshot(snapshotEntityRepository.getOne(snapshotId));
 		currentStructureEntity.getElements().forEach(structureElementEntity -> {
 			structureElementEntity.setAsset(assetEntityRepository.save(structureElementEntity.getAsset()));
+			if (!Asset.OTHER_ASSETS_CCY.equals(structureElementEntity.getAsset().getCcy())) {
+				structureElementEntity.setPrice(priceHistoryEntityRepository.getByAssetAndSnapshot_Id(structureElementEntity.getAsset(), snapshotId));
+			}
 		});
+
 
 		if (strategyEntityRepository.existsById(strategy.getShortName())) {
 			log.debug("strategy " + strategy.getShortName() + " exists.");

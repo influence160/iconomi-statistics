@@ -1,5 +1,6 @@
 package com.ott.iconomi.statistics.domain.model;
 
+import lombok.experimental.NonFinal;
 import org.springframework.core.style.ToStringCreator;
 
 import lombok.AccessLevel;
@@ -19,13 +20,31 @@ public class StructureElement {
 	private Asset asset;
 	
 	private float percent;
-	
+
+	@NonFinal
+	private double usdValue;
+
+	@NonFinal
+	private double quantity;
+
+	/**
+	 *
+	 * @param aum total usd value of all assets of the structure containing this StructureElement
+	 * @param usdPrice usd price of {@link #asset}
+	 */
+	public void calculateQuantityAndUsdValue(double aum, double usdPrice) {
+		usdValue = (aum * percent / 100);
+		quantity = usdValue / usdPrice;
+	}
+
+//	private PriceHistory price;
 
 	public String toString() {
 		return new ToStringCreator(this)
 				.append("id", id)
 				.append("asset", asset)
-				.append("percent", percent) 
+				.append("percent", percent)
+//				.append("price", price)
 				.toString();
 	}
 }

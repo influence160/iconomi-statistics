@@ -10,5 +10,6 @@ import com.ott.iconomi.statistics.domain.model.Asset;
 @Mapper(config = MapperSpringConfiguration.class)
 public interface AssetEntityMapper extends Converter<AssetEntity, Asset>{
 
+    @Override
     public Asset convert(AssetEntity entity);
 }
