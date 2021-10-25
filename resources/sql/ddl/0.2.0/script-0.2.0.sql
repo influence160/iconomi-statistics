@@ -6,6 +6,7 @@ alter table if exists price_history add constraint FK622va25bpefm78c9mfl9qtmkx f
 alter table if exists price_history add constraint FKtgafmhr1qb57qmwly6unl4fyv foreign key (snapshot_id) references snapshot;
 alter table if exists structure_element add constraint FK34mnbfrsf9n4ox43uikp7ug8n foreign key (price_id) references price_history;
 alter table if exists current_structure add column aum float8;
+alter table if exists structure_historical add column aum float8;
 alter table if exists structure_element add column quantity float8;
 alter table if exists structure_element add column usd_value float8;
 
