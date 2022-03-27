@@ -107,7 +107,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<jvmArguments>-Dspring.config.import=classpath:datasource.properties,classpath:queries.yml</jvmArguments>
+					<jvmArguments>-Dspring.config.import=classpath:datasource.properties,classpath:queries.yml,classpath:prepared-queries.yml</jvmArguments>
 				</configuration>
 			</plugin>
 		</plugins>

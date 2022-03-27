@@ -2,7 +2,9 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.Arrays;
@@ -18,6 +20,8 @@ public class Test {
 
 	public static void main(String[] args) throws ParseException {
 		// TODO Auto-generated method stub
+		System.out.println(Instant.now().getEpochSecond());
+		System.out.println(LocalDateTime.of(2021,05,25,12,56,40).toEpochSecond(ZoneOffset.UTC));
 		TestParseFloat();
 	}
 

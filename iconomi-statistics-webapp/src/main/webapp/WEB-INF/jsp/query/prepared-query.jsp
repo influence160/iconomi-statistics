@@ -56,19 +56,19 @@
 				<div class="container-fluid">
 					<div class="card shadow m-4">
 						<div class="card-body">
-							<form:form method="POST" action="/query" modelAttribute="query">
+							<form:form method="GET" action="/query" modelAttribute="query">
 								<div class="form-group">
 									<form:label path="selectedQuery">Select a query </form:label>
 									<form:select
 										class="custom-select custom-select-sm form-control form-control-sm"
 										path="selectedQuery" onchange="selectedQueryChange();">
 										<form:option value="value" label="" />
-										<form:options items="${builtInQueries}" itemLabel="label"
+										<form:options items="${builtInPreparedQueries}" itemLabel="label"
 											itemValue="value" />
 									</form:select>
-									<c:forEach items="${builtInQueries}" var="xx" varStatus="i">
+									<c:forEach items="${builtInPreparedQueries}" var="xx" varStatus="i">
 										<div class="d-none">
-											<span id="q_desciption_${i.index}">${builtInQueries[i.index].description}</span>
+											<span id="q_desciption_${i.index}">${builtInPreparedQueries[i.index].description}</span>
 										</div>
 									</c:forEach>
 								</div>
@@ -114,6 +114,8 @@
 		function selectedQueryChange() {
 			$("textarea[name='queryString']").val(
 					$("select[name='selectedQuery']").val());
+			//TODO updateGui  $('#selectedQuery option:selected').text();
+
 			updateDescription();
 		}
 		function updateDescription() {

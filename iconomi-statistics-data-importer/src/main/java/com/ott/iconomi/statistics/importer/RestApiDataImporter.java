@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -78,7 +79,14 @@ public class RestApiDataImporter {
                     .collect(Collectors.toSet());
             List<PriceHistory> priceHistories = new ArrayList<>(assets.size());
             for (Asset asset : assets) {
-                if (!Asset.OTHER_ASSETS_CCY.equals(asset.getCcy())){
+                //NPE on UST.. IDK why maybe it is delisted
+                if ("UST".equals(asset.getCcy())) {
+                    log.info("adding UST hist");
+                    PriceHistory.PriceHistoryBuilder priceHistoryBuilder = PriceHistory.builder();
+                    priceHistoryBuilder.asset(asset);
+                    priceHistoryBuilder.usdPrice(1.0);
+                    priceHistories.add(priceHistoryBuilder.build());
+                } else if (!Asset.OTHER_ASSETS_CCY.equals(asset.getCcy())){
                     requestsLimitChecker.checkBeforeRequests(1);
                     log.trace("loading asset " + asset.getCcy());
                     Ticker ticker = repeatUntilNotNull(getRestApi()::getAssetPriceChanges, asset.getCcy());
@@ -118,7 +126,17 @@ public class RestApiDataImporter {
         int i = 0;
 //        while (i < times) {
         while (System.currentTimeMillis() - startTime <= RATE_LIMIT_TIME) {
-            R result = function.apply(argument);
+            R result = null;
+            boolean readTimeout;
+            do {
+                try {
+                    result = function.apply(argument);
+                    readTimeout = false;
+                } catch (SocketTimeoutException ex) {
+                    readTimeout = true;
+                    log.warn("read timeout", ex);
+                }
+            } while (readTimeout);
             if (result != null) {
                 return result;
             } else {

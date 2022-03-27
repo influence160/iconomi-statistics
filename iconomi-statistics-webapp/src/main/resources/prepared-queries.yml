@@ -1,0 +1,38 @@
+iconomi:
+  statistics:
+    webapp:
+      prepared-queries:
+        -
+          label: comparaison of capitalisation per ccy between two snapshots
+          description: get the percentage of change of the percentage of thecapitalisation on each ccy ordered
+            (percent2 - percent1) * 100 /(percent2 + y.percent2)
+          value: select x.ccy,  to_char(((x.percent - y.percent) * 100 /(x.percent + y.percent)), 'S999.99') as percent,  to_char(((y.price - x.price) * 100 /(y.price)), 'S999.99') as price_change from
+              (select sum(se.percent) as percent,
+              (select ph.usd_price from surt.price_history ph where ph.snapshot_id = (select max(id) from snapshot) and ph.ccy = se.asset_id)  as price
+              , se.asset_id as ccy  from surt.current_structure cs
+              join surt.current_structure_elements cse ON cse.current_structure_entity_id = cs.id
+              join surt.structure_element se ON se.id = cse.elements_id
+              where cs.snapshot_id = (
+              select max(id) from snapshot where end_time < ?1
+              )
+              group by se.asset_id order by 2 desc) x
+              join
+              (select sum(se.percent) as percent,
+              (select ph.usd_price from surt.price_history ph where ph.snapshot_id = (select max(id) from snapshot where id < (select max(id) from snapshot)) and ph.ccy = se.asset_id) as price,
+              se.asset_id as ccy from surt.structure_historical cs
+              join surt.structure_historical_elements cse ON cse.structure_historical_entity_id = cs.id
+              join surt.structure_element se ON se.id = cse.elements_id
+              join surt.price_history ph on ph.id = se.price_id
+              where cs.snapshot_id = (
+              select max(id) from snapshot where end_time < ?2
+              )
+              group by se.asset_id order by 2 desc) y
+              on x.ccy = y.ccy
+              order by 2 desc;
+          arguments:
+            -
+              label: Snapshot1 ended before
+              type: DATE
+            -
+              label: Snapshot2 ended before
+              type: DATE

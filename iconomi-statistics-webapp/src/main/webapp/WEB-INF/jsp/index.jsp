@@ -8,5 +8,6 @@
 </head>
 <body>
     <a href="<spring:url value='/query'  />" >query</a>
+    <a href="<spring:url value='/prepared-query'  />" >prepared query</a>
 </body>
 </html>
